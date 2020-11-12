@@ -51,6 +51,7 @@
         <q-btn push color="primary" to="/">Voltar</q-btn>
 
         <q-btn push color="primary" size="14px" to="/produtos-cadastro">Novo</q-btn>
+        <button type="button" @click="handleAddCategory" >Novo category teste</button>
 
       </q-card-actions>
     </q-card>
@@ -62,7 +63,7 @@
       <div class="col-sm-12 col-xs-12">
     <q-table
       title="Resultado"
-      :data="data"
+      :data="lista"
       :columns="columns"
       row-key="name"
     />
@@ -74,6 +75,9 @@
  </div>
 </template>
 <script>
+
+import api from '../../services/api'
+
 export default {
   data () {
     return {
@@ -81,23 +85,24 @@ export default {
       options: [
         'Todos', 'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
       ],
+      lista: [],
       columns: [
         {
-          name: 'name',
+          descricao: 'descricao',
           required: true,
           label: 'Código',
           align: 'left',
-          field: row => row.name,
+          field: row => row.descricao,
           format: val => `${val}`,
           sortable: true
         },
-        { name: 'categoria', align: 'center', label: 'Categoria', field: 'calories', sortable: true },
-        { name: 'produto', label: 'Produto', field: 'fat', sortable: true },
-        { name: 'valor_de_compra', label: 'Valor de compra', field: 'carbs' },
-        { name: 'valor_de_venda', label: 'Valor de venda', field: 'protein' },
-        { name: 'quantidade_no_estoque', label: 'Quantidade no estoque', field: 'sodium' },
-        { name: 'data_da_compra', label: 'Data da compra', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        { name: 'fornecedor', label: 'Fornecedor', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        { name: 'id', align: 'center', label: 'Id', field: 'id', sortable: true },
+        { name: 'nome', label: 'Nome', field: 'nome', sortable: true }
+        // { name: 'valor_de_compra', label: 'Valor de compra', field: 'carbs' },
+        // { name: 'valor_de_venda', label: 'Valor de venda', field: 'protein' },
+        // { name: 'quantidade_no_estoque', label: 'Quantidade no estoque', field: 'sodium' },
+        // { name: 'data_da_compra', label: 'Data da compra', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+        // { name: 'fornecedor', label: 'Fornecedor', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
       ],
       data: [
         {
@@ -202,6 +207,30 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    async handleAddCategory () {
+      console.log('clickou')
+      await api.post('categorias', {
+        nome: 'cat x',
+        descricao: 'categoria x'
+      }).then(response => {
+        alert('cadastrado com sucesso')
+        console.log('cadastro: ', response)
+      }).catch(err => alert('erro ' + err))
+    }
+  },
+  mounted () {
+    const load = async () => {
+      const response = await api.get('categorias')
+      this.lista = response.data
+
+      const responseDelete = await api.get(`categorias/${4}`)
+      if (responseDelete.data) {
+        await api.delete(`categorias/${4}`)
+      }
+    }
+    load()
   }
 }
 </script>

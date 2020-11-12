@@ -88,6 +88,11 @@ export default {
           link: '/usuarios-login'
         },
         {
+          title: 'Categorias',
+          icon: 'category',
+          link: '/categorias-consulta'
+        },
+        {
           title: 'Produtos',
           icon: 'shopping_basket',
           link: '/produtos-consulta'
