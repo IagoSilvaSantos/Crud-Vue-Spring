@@ -3,7 +3,7 @@
     <q-layout>
       <q-header elevated class="info">
         <q-toolbar>
-          <q-toolbar-title>Categoria-Consulta</q-toolbar-title>
+          <q-toolbar-title>Marcas-Consulta</q-toolbar-title>
         </q-toolbar>
       </q-header>
       <br /><br />
@@ -29,12 +29,7 @@
                   >
                     <q-input v-model="filtro.nome" label="Nome" />
                   </div>
-                  <div
-                    class="col-sm-4 col-xs-12"
-                    style="padding: 0px 10px 10px 10px"
-                  >
-                    <q-input v-model="filtro.descricao" label="Descricao" />
-                  </div>
+
                 </div>
                 <br />
               </q-card-section>
@@ -54,7 +49,7 @@
                   push
                   color="primary"
                   size="14px"
-                  to="/categorias-cadastro"
+                  to="/marcas-cadastro"
                   >Novo</q-btn
                 >
               </q-card-actions>
@@ -74,7 +69,6 @@
                 <tr :key="item" v-for="item in lista">
                   <td>{{ item.id }}</td>
                   <td>{{ item.nome }}</td>
-                  <td>{{ item.descricao }}</td>
                   <td>
                     <q-btn
                       size="sm"
@@ -120,11 +114,9 @@ export default {
     return {
       model: null,
       text: '',
-      options: ['Todos', 'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
       lista: [],
       filtro: {
         id: '',
-        descricao: '',
         nome: ''
       },
       columns: [
@@ -137,10 +129,6 @@ export default {
           label: 'Nome'
         },
         {
-          name: 'descricao',
-          label: 'Descrição'
-        },
-        {
           name: 'acoes',
           label: 'Ações'
         }
@@ -150,7 +138,7 @@ export default {
   methods: {
     async handleDelete (id) {
       await api
-        .delete(`categorias/${id}`)
+        .delete(`marcas/${id}`)
         .then(() => {
           const index = this.lista.findIndex((item) => item.id === id)
           const auxList = [...this.lista]
@@ -169,7 +157,7 @@ export default {
         })
     },
     handleUpdate (id) {
-      this.$router.push(`categorias-cadastro/${id}`)
+      this.$router.push(`marcas-cadastro/${id}`)
     },
     handleFiltro () {
       if (this.filtro.id) {
@@ -182,22 +170,16 @@ export default {
           item.nome.includes(this.filtro.nome)
         )
       }
-      if (this.filtro.descricao) {
-        this.lista = this.lista.filter((item) =>
-          item.descricao.includes(this.filtro.descricao)
-        )
-      }
     },
     async handleFiltroLimpar () {
       this.filtro = {
         id: '',
-        descricao: '',
         nome: ''
       }
       await this.loadLista()
     },
     async loadLista () {
-      const response = await api.get('categorias')
+      const response = await api.get('marcas')
       if (response.data.length > 0) {
         const auxList = response.data.map((item) => {
           return { ...item, acoes: '' }

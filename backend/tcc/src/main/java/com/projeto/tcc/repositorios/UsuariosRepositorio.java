@@ -6,4 +6,6 @@ import com.projeto.tcc.entidades.Usuarios;
 
 public interface UsuariosRepositorio extends JpaRepository<Usuarios, Long> {
 
+	Usuarios findByNome(String nome);
+
 }

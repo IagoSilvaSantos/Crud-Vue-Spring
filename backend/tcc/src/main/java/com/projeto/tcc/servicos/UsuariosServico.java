@@ -40,4 +40,15 @@ public class UsuariosServico {
 		entidade.setNome(usuarios.getNome());
 	}
 
+	public Usuarios logar(Usuarios usuarios) {
+	    Usuarios usuario = usuariosRepositorio.findByNome(usuarios.getNome());
+	    
+	    if(usuario == null) return null;
+	    
+	    if(usuario.getSenha().equals(usuarios.getSenha()) ) {
+	    	return usuario;
+	    }
+		return null;
+	}
+
 }

@@ -11,11 +11,15 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
-          Sistema de Controle de Estoque
-        </q-toolbar-title>
+        <q-toolbar-title> Sistema de Controle de Estoque </q-toolbar-title>
 
-        <div>Versão 1.0</div>
+        <div>
+          <span>Versão 1.0</span>
+
+          <q-btn v-if="validAuthenticated()" style="margin-left: 10px;" @click="handleLogout" round color="primary" icon="directions"
+            >Deslogar</q-btn
+          >
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -26,22 +30,18 @@
       content-class="bg-primary"
     >
       <q-list>
-        <q-item-label
-          class="text-grey-1 text-subtitle2"
-        >
-        <q-toolbar>
-           <q-btn
-          flat
-          dense
-          icon="menu"
-          aria-label="Menu"
-          class="text-grey-1 text-subtitle2"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
-       <q-toolbar-title>
-          Menu
-        </q-toolbar-title>
-        </q-toolbar>
+        <q-item-label class="text-grey-1 text-subtitle2">
+          <q-toolbar>
+            <q-btn
+              flat
+              dense
+              icon="menu"
+              aria-label="Menu"
+              class="text-grey-1 text-subtitle2"
+              @click="leftDrawerOpen = !leftDrawerOpen"
+            />
+            <q-toolbar-title> Menu </q-toolbar-title>
+          </q-toolbar>
         </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
@@ -51,11 +51,9 @@
         />
       </q-list>
     </q-drawer>
-          <q-footer>
-        <q-toolbar>
-         SistemaDeControleDeEstoque Copyright © 2020
-        </q-toolbar>
-      </q-footer>
+    <q-footer>
+      <q-toolbar> SistemaDeControleDeEstoque Copyright © 2020 </q-toolbar>
+    </q-footer>
 
     <q-page-container>
       <router-view />
@@ -65,7 +63,7 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink'
-
+import { logout, isAuthenticated } from '../services/auth'
 export default {
   name: 'MainLayout',
 
@@ -113,18 +111,39 @@ export default {
           link: '/estoque-consulta'
         },
         {
+          title: 'Marcas',
+          icon: 'store',
+          link: '/marcas-consulta'
+        },
+        {
           title: 'Finanças',
           icon: 'monetization_on',
           link: '/financas-consulta'
         }
       ]
     }
+  },
+  methods: {
+    handleLogout () {
+      this.$q.notify({
+        type: 'positive',
+        message: 'Deslogado com sucesso.'
+      })
+      this.$router.push('/usuarios-login')
+      logout()
+    },
+    validAuthenticated () {
+      if (isAuthenticated()) {
+        return true
+      }
+      return false
+    }
+
   }
 }
 </script>
 <style>
 body {
-    background-color: #d9dade
+  background-color: #d9dade;
 }
-
 </style>

@@ -2,6 +2,7 @@ import { route } from 'quasar/wrappers'
 import VueRouter from 'vue-router'
 import { StoreInterface } from '../store'
 import routes from './routes'
+import { isAuthenticated } from '../services/auth'
 
 /*
  * If not building with SSR mode, you can
@@ -20,6 +21,12 @@ export default route<StoreInterface>(function ({ Vue }) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  })
+
+  Router.beforeEach((to, from, next) => {
+    if (to.path === '/usuarios-login' && isAuthenticated()) next({ path: '/' })
+    else if ((to.path !== '/usuarios-login' && to.path !== '/usuarios-cadastro') && !isAuthenticated()) next({ path: '/usuarios-login' })
+    else next()
   })
 
   return Router

@@ -1,236 +1,416 @@
 <template>
   <div class="q-pa-md">
-
-    <q-layout >
+    <q-layout>
       <q-header elevated class="info">
         <q-toolbar>
-
           <q-toolbar-title>Produtos-Consulta</q-toolbar-title>
-
         </q-toolbar>
       </q-header>
-      <br><br>
-<q-page class="container q-pa-xs">
-<br>
-    <div class="row">
-        <div class="col-sm-12 col-xs-12">
-     <q-card class="my-card">
-      <q-card-section class="bg-grey-1 text-black">
+      <br /><br />
+      <q-page class="container q-pa-xs">
+        <br />
         <div class="row">
-        <div class="col-sm-2 col-xs-12" style="padding: 0px 10px 10px 10px">
-              <q-input v-model="text" label="Código" />
-        </div>
-        <div class="col-sm-5 col-xs-12" style="padding: 0px 10px 10px 10px">
-               <q-select outlined v-model="model" :options="options" label="Categoria" />
-        </div>
-            <div class="col-sm-5 col-xs-12" style="padding: 0px 10px 10px 10px">
-              <q-select outlined v-model="model" :options="options" label="Produto" />
-            </div>
-        </div>
-        <br>
-        <div class="row">
-        <div class="col-sm-4 col-xs-12" style="padding: 0px 10px 10px 10px">
-              <q-input v-model="text" label="Marca" />
-        </div>
-        <div class="col-sm-4 col-xs-12" style="padding: 0px 10px 10px 10px">
-               <q-input v-model="text" label="Valor" />
-        </div>
-            <div class="col-sm-4 col-xs-12" style="padding: 0px 10px 10px 10px">
-              <q-input v-model="text" label="Fornecedor" />
-            </div>
-        </div>
-        <br>
+          <div class="col-sm-12 col-xs-12">
+            <q-card class="my-card">
+              <q-card-section class="bg-grey-1 text-black">
+                <div class="row">
+                  <div
+                    class="col-sm-4 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <q-input v-model="filtro.id" label="Código" />
+                  </div>
 
-      </q-card-section>
+                  <div
+                    class="col-sm-4 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <q-input v-model="filtro.nome" label="Nome" />
+                  </div>
 
-      <q-card-actions align="left">
-        <q-btn push color="primary">Consultar</q-btn>
+                  <div
+                    class="col-sm-4 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <q-input v-model="filtro.descricao" label="Descrição" />
+                  </div>
 
-        <q-btn push color="primary" to="/">Limpar</q-btn>
+                  <div
+                    class="col-sm-6 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <select class="select-list" v-model="filtro.categorias">
+                      <option>Escolha Categoria</option>
+                      <option
+                        class="select-option"
+                        v-for="categoria in listCategorias"
+                        :key="categoria.id"
+                        v-bind:value="categoria"
+                      >
+                        {{ categoria.nome }}
+                      </option>
+                    </select>
+                  </div>
 
-        <q-btn push color="primary" to="/">Voltar</q-btn>
+                  <div
+                    class="col-sm-6 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <select class="select-list" v-model="filtro.estoque">
+                      <option>Escolha Estoque</option>
+                      <option
+                        class="select-option"
+                        v-for="aux_estoque in listEstoques"
+                        :key="aux_estoque.id"
+                        v-bind:value="aux_estoque"
+                      >
+                        {{ aux_estoque.id }}
+                      </option>
+                    </select>
+                  </div>
 
-        <q-btn push color="primary" size="14px" to="/produtos-cadastro">Novo</q-btn>
-        <button type="button" @click="handleAddCategory" >Novo category teste</button>
+                  <div
+                    class="col-sm-6 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <select class="select-list" v-model="filtro.marcas">
+                      <option>Escolha Marcas</option>
+                      <option
+                        class="select-option"
+                        v-for="aux_marcas in listMarcas"
+                        :key="aux_marcas.id"
+                        v-bind:value="aux_marcas"
+                      >
+                        {{ aux_marcas.nome }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <br />
+                <div class="row">
+                  <div
+                    class="col-sm-4 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <q-input v-model="filtro.valorVenda" label="Valor Venda" />
+                  </div>
+                  <div
+                    class="col-sm-4 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <q-input
+                      v-model="filtro.valorCompra"
+                      label="Valor Compra"
+                    />
+                  </div>
+                </div>
+                <br />
+              </q-card-section>
 
-      </q-card-actions>
-    </q-card>
+              <q-card-actions align="left">
+                <q-btn push @click="handleFiltro" color="primary">Consultar</q-btn>
 
+                <q-btn push @click="handleFiltroLimpar" color="primary">Limpar</q-btn>
+
+                <q-btn push color="primary" to="/">Voltar</q-btn>
+
+                <q-btn push color="primary" size="14px" to="/produtos-cadastro"
+                  >Novo</q-btn
+                >
+              </q-card-actions>
+            </q-card>
+          </div>
         </div>
-    </div>
-    <br>
-      <div class="row">
-      <div class="col-sm-12 col-xs-12">
-    <q-table
-      title="Resultado"
-      :data="lista"
-      :columns="columns"
-      row-key="name"
-    />
+        <br />
+
+        <template>
+          <div class="q-pa-md jtable">
+            <table>
+              <thead>
+                <tr :key="col" v-for="col in columns">
+                  <th>{{ col.label }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr :key="item" v-for="item in lista">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.nome }}</td>
+                  <td>{{ item.descricao }}</td>
+                  <td>{{ item.categorias.nome }}</td>
+                  <td>
+                    <q-btn
+                      size="sm"
+                      color="red"
+                      round
+                      dense
+                      @click="handleDelete(item.id)"
+                      icon="remove"
+                      style="margin-right: 10px"
+                    />
+                    <q-btn
+                      size="sm"
+                      color="orange"
+                      round
+                      dense
+                      @click="handleUpdate(item.id)"
+                      icon="edit"
+                    />
+                  </td>
+                </tr>
+                <tr v-if="lista.length == 0">
+                  <p style="margin: 0 auto; padding: 40px">Sem elementos</p>
+                </tr>
+              </tbody>
+              <tfoot>
+                <p style="text-align: center; padding: 5px">
+                  Total de elementos {{ lista.length }}.
+                </p>
+              </tfoot>
+            </table>
+          </div>
+        </template>
+      </q-page>
+    </q-layout>
   </div>
-  </div>
-  <br>
-</q-page>
-</q-layout >
- </div>
 </template>
 <script>
-
 import api from '../../services/api'
 
 export default {
   data () {
     return {
       model: null,
-      options: [
-        'Todos', 'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'
-      ],
+      text: '',
+      options: ['Todos', 'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
       lista: [],
+      categoriaFiltro: '',
+      listCategorias: [],
+      listEstoques: [],
+      listMarcas: [],
+      filtro: {
+        id: '',
+        descricao: '',
+        nome: '',
+        categorias: 'Escolha Categoria',
+        estoque: 'Escolha Estoque',
+        marcas: 'Escolha Marcas',
+        valorVenda: '',
+        valorCompra: ''
+      },
       columns: [
         {
-          descricao: 'descricao',
-          required: true,
-          label: 'Código',
-          align: 'left',
-          field: row => row.descricao,
-          format: val => `${val}`,
-          sortable: true
-        },
-        { name: 'id', align: 'center', label: 'Id', field: 'id', sortable: true },
-        { name: 'nome', label: 'Nome', field: 'nome', sortable: true }
-        // { name: 'valor_de_compra', label: 'Valor de compra', field: 'carbs' },
-        // { name: 'valor_de_venda', label: 'Valor de venda', field: 'protein' },
-        // { name: 'quantidade_no_estoque', label: 'Quantidade no estoque', field: 'sodium' },
-        // { name: 'data_da_compra', label: 'Data da compra', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        // { name: 'fornecedor', label: 'Fornecedor', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-      ],
-      data: [
-        {
-          name: '1',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: '14%',
-          iron: '1%'
+          name: 'id',
+          label: '#ID'
         },
         {
-          name: '2',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: '8%',
-          iron: '1%'
+          name: 'nome',
+          label: 'Nome'
         },
         {
-          name: '3',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: '6%',
-          iron: '7%'
+          name: 'descricao',
+          label: 'Descrição'
         },
         {
-          name: '4',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: '3%',
-          iron: '8%'
+          name: 'categorias.nome',
+          label: 'Categoria'
         },
         {
-          name: '5',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: '7%',
-          iron: '16%'
-        },
-        {
-          name: '6',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          sodium: 50,
-          calcium: '0%',
-          iron: '0%'
-        },
-        {
-          name: '7',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          sodium: 38,
-          calcium: '0%',
-          iron: '2%'
-        },
-        {
-          name: '8',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          sodium: 562,
-          calcium: '0%',
-          iron: '45%'
-        },
-        {
-          name: '9',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          sodium: 326,
-          calcium: '2%',
-          iron: '22%'
-        },
-        {
-          name: '10',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          sodium: 54,
-          calcium: '12%',
-          iron: '6%'
+          name: 'acoes',
+          label: 'Ações'
         }
       ]
     }
   },
   methods: {
-    async handleAddCategory () {
-      console.log('clickou')
-      await api.post('categorias', {
-        nome: 'cat x',
-        descricao: 'categoria x'
-      }).then(response => {
-        alert('cadastrado com sucesso')
-        console.log('cadastro: ', response)
-      }).catch(err => alert('erro ' + err))
+    async handleDelete (id) {
+      await api
+        .delete(`produtos/${id}`)
+        .then(() => {
+          const index = this.lista.findIndex((item) => item.id === id)
+          const auxList = [...this.lista]
+          auxList.splice(index, 1)
+          this.lista = [...auxList]
+
+          this.$q.notify({
+            type: 'positive',
+            message: 'deletado com sucesso.'
+          })
+        })
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Ops, ocorreu um erro ao deletar.'
+          })
+        }
+        )
+    },
+    handleUpdate (id) {
+      this.$router.push(`produtos-cadastro/${id}`)
+    },
+    handleFiltro () {
+      if (this.filtro.id) {
+        this.lista = this.lista.filter(
+          (item) => item.id === parseInt(this.filtro.id)
+        )
+      }
+      if (this.filtro.nome) {
+        this.lista = this.lista.filter((item) =>
+          item.nome.includes(this.filtro.nome)
+        )
+      }
+      if (this.filtro.descricao) {
+        this.lista = this.lista.filter((item) =>
+          item.descricao.includes(this.filtro.descricao)
+        )
+      }
+
+      if (this.filtro.categorias && this.filtro.categorias !== 'Escolha Categoria') {
+        this.lista = this.lista.filter((item) =>
+          item.categorias.nome.includes(this.filtro.categorias.nome)
+        )
+      }
+
+      if (this.filtro.estoque && this.filtro.estoque !== 'Escolha Estoque') {
+        this.lista = this.lista.filter((item) =>
+          item.estoque.id.includes(this.filtro.estoque.id)
+        )
+      }
+
+      if (this.filtro.estoque && this.filtro.estoque !== 'Escolha Marcas') {
+        this.lista = this.lista.filter((item) =>
+          item.estoque.marcas.includes(this.filtro.estoque.marcas)
+        )
+      }
+
+      if (this.filtro.valorVenda && this.filtro.valorVenda) {
+        this.lista = this.lista.filter((item) =>
+          item.valorVenda === parseInt(this.filtro.valorVenda)
+        )
+      }
+
+      if (this.filtro.valorCompra && this.filtro.valorCompra) {
+        this.lista = this.lista.filter((item) =>
+          item.valorCompra === parseInt(this.filtro.valorCompra)
+        )
+      }
+    },
+    async handleFiltroLimpar () {
+      this.filtro = {
+        id: '',
+        descricao: '',
+        nome: '',
+        categorias: 'Escolha Categoria',
+        marcas: 'Escolha Marcas',
+        estoque: 'Escolha Estoque'
+      }
+      await this.loadLista()
+    },
+    async loadLista () {
+      const response = await api.get('produtos')
+      if (response.data.length > 0) {
+        const auxList = response.data.map((item) => {
+          return { ...item, acoes: '' }
+        })
+        this.lista = [...auxList]
+      }
     }
   },
   mounted () {
     const load = async () => {
-      const response = await api.get('categorias')
-      this.lista = response.data
-
-      const responseDelete = await api.get(`categorias/${4}`)
-      if (responseDelete.data) {
-        await api.delete(`categorias/${4}`)
+      const responseCategorias = await api.get('categorias')
+      if (responseCategorias?.data?.length > 0) {
+        this.listCategorias = responseCategorias.data
       }
+      const responseMarcas = await api.get('marcas')
+      if (responseMarcas?.data?.length > 0) {
+        this.listMarcas = responseMarcas.data
+      }
+      const responseEstoque = await api.get('estoque')
+      if (responseEstoque?.data?.length > 0) {
+        this.listEstoques = responseEstoque.data
+      }
+
+      await this.loadLista()
     }
     load()
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  text-align: left;
+  padding: 8px;
+  flex: 1;
+}
+
+tr {
+  display: flex;
+  width: 100%;
+}
+
+th {
+  border-left: 1px solid lightgray;
+}
+
+th:child-first {
+  border-left: 0;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+th, tfoot {
+  background-color: #1976d2;
+  color: white;
+  border-radius: 6px;
+}
+
+thead {
+  display: flex;
+  width: 100%;
+  align-items: 'center';
+  justify-content: 'space-between';
+}
+
+tbody {
+  display: flex;
+  width: 100% !important;
+  flex-direction: column;
+}
+
+tfoot {
+  margin-top: 10px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.jtable {
+  padding: 20px;
+  background: white;
+  color: black;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.select-list {
+  font-size: 18px;
+  padding: 14px 14px;
+  margin-top: 10px;
+  border-radius: 4px;
+  outline: 0;
+  border: 1px solid lightgray;
+  width: 100%;
+}
+
+.select-option {
+  padding: 8px 14px;
+}
+</style>

@@ -3,7 +3,7 @@
     <q-layout>
       <q-header elevated class="info">
         <q-toolbar>
-          <q-toolbar-title>Categorias-Cadastro</q-toolbar-title>
+          <q-toolbar-title>Estoque-Cadastro</q-toolbar-title>
         </q-toolbar>
       </q-header>
       <br /><br />
@@ -20,7 +20,7 @@
                   >
                     <q-input
                       :disable="true"
-                      v-model="categorias.id"
+                      v-model="estoque.id"
                       label="ID"
                     />
                   </div>
@@ -28,17 +28,27 @@
                     class="col-sm-6 col-xs-12"
                     style="padding: 0px 10px 10px 10px"
                   >
-                    <q-input v-model="categorias.nome" label="Nome" />
+                    <q-input v-model="estoque.quantidade" label="Quantidade" />
                   </div>
                 </div>
-                <div class="row">
+
+                 <div class="row">
+
                   <div
                     class="col-sm-6 col-xs-12"
                     style="padding: 0px 10px 10px 10px"
                   >
-                    <q-input v-model="categorias.descricao" label="Descrição" />
+                    <q-input v-model="estoque.qtdMax" label="Quantidade max" />
+                  </div>
+
+                  <div
+                    class="col-sm-6 col-xs-12"
+                    style="padding: 0px 10px 10px 10px"
+                  >
+                    <q-input v-model="estoque.qtdMin" label="Quantidade min" />
                   </div>
                 </div>
+
               </q-card-section>
 
               <q-card-actions align="left">
@@ -46,7 +56,7 @@
 
                 <q-btn push color="primary">Limpar</q-btn>
 
-                <q-btn push color="primary" to="/categorias-consulta"
+                <q-btn push color="primary" to="/marcas-consulta"
                   >Voltar</q-btn
                 >
               </q-card-actions>
@@ -64,10 +74,11 @@ import api from '../../services/api'
 export default {
   data () {
     return {
-      categorias: {
-        nome: '',
-        descricao: '',
-        id: undefined
+      estoque: {
+        quantidade: '',
+        id: undefined,
+        qtdMax: '',
+        qtdMin: ''
       }
     }
   },
@@ -77,13 +88,18 @@ export default {
       const method = id ? 'put' : 'post'
       const tipo = id ? `/${id}` : ''
       try {
-        await api[method](`categorias${tipo}`, this.categorias)
+        await api[method](`estoque${tipo}`, {
+          ...this.estoque,
+          quantidade: parseInt(this.estoque.quantidade),
+          qtdMax: parseInt(this.estoque.qtdMax),
+          qtdMin: parseInt(this.estoque.qtdMin)
+        })
 
         this.$q.notify({
           type: 'positive',
           message: 'cadastrado com sucesso.'
         })
-        this.$router.push('/categorias-consulta')
+        this.$router.push('/estoque-consulta')
       } catch (err) {
         this.$q.notify({
           type: 'negativo',
@@ -96,8 +112,8 @@ export default {
     const load = async () => {
       const id = this.$route.params.id
       if (id) {
-        const response = await api.get(`categorias/${id}`)
-        this.categorias = response.data
+        const response = await api.get(`estoque/${id}`)
+        this.estoque = response.data
       }
     }
     load()
