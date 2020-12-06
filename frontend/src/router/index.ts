@@ -29,5 +29,9 @@ export default route<StoreInterface>(function ({ Vue }) {
     else next()
   })
 
+
+
   return Router
 })
+
+

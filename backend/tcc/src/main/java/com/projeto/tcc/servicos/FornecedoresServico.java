@@ -42,6 +42,18 @@ public class FornecedoresServico {
 		entidade.setRepresentante(fornecedores.getRepresentante());
 		entidade.setCnpj(fornecedores.getCnpj());
 		entidade.setTelefone(fornecedores.getTelefone());
+	}
+
+	public List<Fornecedores> buscarFiltrada(Long id, String razaoSocial, String nomeFantasia, String representante, String telefone,
+			String cnpj) {
+ 
+		id = id == null ? 0 : id;
+		razaoSocial = razaoSocial == null ? "" : "%"+razaoSocial+"%";
+		nomeFantasia = nomeFantasia == null ? "" : "%"+nomeFantasia+"%";
+		representante = representante == null ? "" : "%"+representante+"%";
+		telefone = telefone == null ? "" : "%"+telefone+"%";
+		cnpj = cnpj == null ? "" : "%"+cnpj+"%";
+		return fornecedoresRepositorio.buscarFiltrada(id, razaoSocial,nomeFantasia, representante, telefone, cnpj);
 
 	}
 

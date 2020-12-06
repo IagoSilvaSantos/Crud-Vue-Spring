@@ -40,6 +40,8 @@ public class VendasServico {
 		entidade.setQuantidade(vendas.getQuantidade());
 		entidade.setValor(vendas.getValor());
 		entidade.setData(vendas.getData());
+		entidade.setUsuarios(vendas.getUsuarios());
+		entidade.setProdutos(vendas.getProdutos());
 	}
 
 }

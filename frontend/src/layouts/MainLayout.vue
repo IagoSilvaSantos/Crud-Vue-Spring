@@ -16,7 +16,13 @@
         <div>
           <span>Versão 1.0</span>
 
-          <q-btn v-if="validAuthenticated()" style="margin-left: 10px;" @click="handleLogout" round color="primary" icon="directions"
+          <q-btn
+            v-if="validAuthenticated()"
+            style="margin-left: 10px"
+            @click="handleLogout"
+            round
+            color="primary"
+            icon="directions"
             >Deslogar</q-btn
           >
         </div>
@@ -45,7 +51,7 @@
         </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
-          :key="link.title"
+          :key="link.link"
           v-bind="link"
           class="bg-blue-10 text-grey-1 shadow-3 rounded-borders"
         />
@@ -70,57 +76,11 @@ export default {
   components: {
     EssentialLink
   },
-
+  logado: false,
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: 'Início',
-          icon: 'home',
-          link: '/'
-        },
-        {
-          title: 'Usuários',
-          icon: 'person',
-          link: '/usuarios-login'
-        },
-        {
-          title: 'Categorias',
-          icon: 'category',
-          link: '/categorias-consulta'
-        },
-        {
-          title: 'Produtos',
-          icon: 'shopping_basket',
-          link: '/produtos-consulta'
-        },
-        {
-          title: 'Vendas',
-          icon: ' local_offer',
-          link: '/vendas-consulta'
-        },
-        {
-          title: 'Compras',
-          icon: 'shopping_cart',
-          link: '/compras-consulta'
-        },
-        {
-          title: 'Estoque',
-          icon: 'storage',
-          link: '/estoque-consulta'
-        },
-        {
-          title: 'Marcas',
-          icon: 'store',
-          link: '/marcas-consulta'
-        },
-        {
-          title: 'Finanças',
-          icon: 'monetization_on',
-          link: '/financas-consulta'
-        }
-      ]
+      essentialLinks: []
     }
   },
   methods: {
@@ -130,7 +90,65 @@ export default {
         message: 'Deslogado com sucesso.'
       })
       this.$router.push('/usuarios-login')
+
+      document.location.reload(true)
+
       logout()
+    },
+    ajustarLista () {
+      if (this.validAuthenticated()) {
+        this.essentialLinks = [
+          {
+            title: 'Início',
+            icon: 'home',
+            link: '/'
+          },
+
+          {
+            title: 'Categorias',
+            icon: 'category',
+            link: '/categorias-consulta'
+          },
+          {
+            title: 'Produtos',
+            icon: 'shopping_basket',
+            link: '/produtos-consulta'
+          },
+          {
+            title: 'Vendas',
+            icon: ' local_offer',
+            link: '/vendas-consulta'
+          },
+          {
+            title: 'Compras',
+            icon: 'shopping_cart',
+            link: '/compras-consulta'
+          },
+          {
+            title: 'Estoque',
+            icon: 'storage',
+            link: '/estoque-consulta'
+          },
+          {
+            title: 'Marcas',
+            icon: 'store',
+            link: '/marcas-consulta'
+          },
+          {
+            title: 'Fornecedores',
+            icon: 'money',
+            link: '/fornecedores-consulta'
+          }
+        ]
+      } else {
+        this.essentialLinks = [
+          {
+            title: 'Usuários',
+            icon: 'person',
+            link: '/usuarios-login'
+
+          }]
+      }
     },
     validAuthenticated () {
       if (isAuthenticated()) {
@@ -139,6 +157,14 @@ export default {
       return false
     }
 
+  },
+  watch: {
+    isAuthenticated: () => {
+      this.ajustarLista()
+    }
+  },
+  mounted () {
+    this.ajustarLista()
   }
 }
 </script>

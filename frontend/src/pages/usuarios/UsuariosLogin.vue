@@ -11,7 +11,7 @@
                   </div>
                   <br>
                  <div class="q-gutter-md">
-                      <q-input v-model="usuarios.senha" label="Digite sua senha" />
+                      <q-input v-model="usuarios.senha" type="password" label="Digite sua senha" />
                  </div>
                    <br>
               </q-card-section>
@@ -48,20 +48,22 @@ export default {
       try {
         await api.post('usuarios/logar', this.usuarios)
           .then(response => {
-            console.log('response: ', response)
             if (!response.data) {
               this.$q.notify({
                 type: 'negative',
                 message: 'Dados de login invalido.'
               })
             } else {
-              login('@tcc-user', response.data)
+              console.log('logar', response.data)
+              login(JSON.stringify(response.data))
 
               this.$q.notify({
                 type: 'positive',
                 message: 'Logado com suceso.'
               })
+
               this.$router.push('/')
+              document.location.reload(true)
             }
           })
       } catch (err) {

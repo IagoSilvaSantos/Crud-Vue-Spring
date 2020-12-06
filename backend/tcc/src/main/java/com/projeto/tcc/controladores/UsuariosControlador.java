@@ -26,7 +26,7 @@ public class UsuariosControlador {
 	@Autowired
 	UsuariosServico usuariosServico;
 
-	@GetMapping("/logar")
+	@GetMapping("")
 	public List<Usuarios> listar() {
 		return usuariosServico.listar();
 	}

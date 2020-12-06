@@ -68,7 +68,8 @@ export default {
       try {
         await api.post('usuarios', this.usuarios)
         alert('cadastrado com sucesso')
-        this.$router.push('/usuarios-login')
+        // this.$router.push('/usuarios-login')
+        this.$router.push('/')
       } catch (err) {
         alert('erro ' + err)
       }

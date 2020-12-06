@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.tcc.entidades.Categorias;
@@ -34,6 +35,12 @@ public class CategoriasControlador {
 	@GetMapping("/{id}")
 	public ResponseEntity<Categorias> buscarPeloCodigo(@PathVariable Long id) {
 		Categorias categorias = categoriasServico.buscarPeloCodigo(id);
+		return categorias != null ? ResponseEntity.ok(categorias) : ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping("/filtrado")
+	public ResponseEntity<List<Categorias>> findPagina(@RequestParam(required = false, name = "id") Long id, @RequestParam(required = false, name = "nome") String nome, @RequestParam(required = false, name = "descricao") String descricao) {
+		List<Categorias> categorias = categoriasServico.buscarFiltrada(id, nome, descricao);
 		return categorias != null ? ResponseEntity.ok(categorias) : ResponseEntity.notFound().build();
 	}
 

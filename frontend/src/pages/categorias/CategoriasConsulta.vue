@@ -71,7 +71,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr :key="item" v-for="item in lista">
+                <tr :key="(item)" v-for="item in lista">
                   <td>{{ item.id }}</td>
                   <td>{{ item.nome }}</td>
                   <td>{{ item.descricao }}</td>
@@ -119,8 +119,6 @@ export default {
   data () {
     return {
       model: null,
-      text: '',
-      options: ['Todos', 'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
       lista: [],
       filtro: {
         id: '',
@@ -171,22 +169,20 @@ export default {
     handleUpdate (id) {
       this.$router.push(`categorias-cadastro/${id}`)
     },
-    handleFiltro () {
+    async handleFiltro () {
+      let newFilter = '?filter=filter'
+
       if (this.filtro.id) {
-        this.lista = this.lista.filter(
-          (item) => item.id === parseInt(this.filtro.id)
-        )
+        newFilter += `&id=${this.filtro.id}`
       }
       if (this.filtro.nome) {
-        this.lista = this.lista.filter((item) =>
-          item.nome.includes(this.filtro.nome)
-        )
+        newFilter += `&nome=${this.filtro.nome}`
       }
       if (this.filtro.descricao) {
-        this.lista = this.lista.filter((item) =>
-          item.descricao.includes(this.filtro.descricao)
-        )
+        newFilter += `&descricao=${this.filtro.descricao}`
       }
+
+      await this.loadLista(newFilter)
     },
     async handleFiltroLimpar () {
       this.filtro = {
@@ -196,8 +192,8 @@ export default {
       }
       await this.loadLista()
     },
-    async loadLista () {
-      const response = await api.get('categorias')
+    async loadLista (newFilter = '') {
+      const response = await api.get('categorias/filtrado'.concat(newFilter))
       if (response.data.length > 0) {
         const auxList = response.data.map((item) => {
           return { ...item, acoes: '' }

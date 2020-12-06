@@ -41,4 +41,11 @@ public class CategoriasServico {
 		entidade.setDescricao(categorias.getDescricao());
 	}
 
+	public List<Categorias> buscarFiltrada(Long id, String nome, String descricao) {
+		id = id == null ? 0 : id;
+		nome = nome == null ? "" : "%"+nome+"%";
+		descricao = descricao == null ? "" : "%"+descricao+"%";
+		return categoriasRepositorio.buscarFiltrada(id, nome, descricao);
+	}
+
 }

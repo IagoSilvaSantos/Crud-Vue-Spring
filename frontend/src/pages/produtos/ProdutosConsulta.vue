@@ -40,7 +40,7 @@
                     style="padding: 0px 10px 10px 10px"
                   >
                     <select class="select-list" v-model="filtro.categorias">
-                      <option>Escolha Categoria</option>
+                      <option disabled :selected="false" >Escolha Categoria</option>
                       <option
                         class="select-option"
                         v-for="categoria in listCategorias"
@@ -181,7 +181,6 @@ export default {
     return {
       model: null,
       text: '',
-      options: ['Todos', 'Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
       lista: [],
       categoriaFiltro: '',
       listCategorias: [],
