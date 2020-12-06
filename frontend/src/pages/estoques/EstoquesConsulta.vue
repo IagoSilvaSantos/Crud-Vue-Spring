@@ -15,23 +15,14 @@
               <q-card-section class="bg-grey-1 text-black">
                 <div class="row">
                   <div
-                    class="col-sm-2 col-xs-12"
+                    class="col-sm-6 col-xs-12"
                     style="padding: 0px 10px 10px 10px"
                   >
                     <q-input v-model="filtro.id" label="Id" />
                   </div>
-                </div>
-                <br />
-                <div class="row">
-                  <div
-                    class="col-sm-4 col-xs-12"
-                    style="padding: 0px 10px 10px 10px"
-                  >
-                    <q-input v-model="filtro.nome" label="Nome" />
-                  </div>
 
                   <div
-                    class="col-sm-4 col-xs-12"
+                    class="col-sm-6 col-xs-12"
                     style="padding: 0px 10px 10px 10px"
                   >
                     <q-input v-model="filtro.quantidade" label="Quantidade" />
@@ -42,14 +33,14 @@
 
                  <div class="row">
                   <div
-                    class="col-sm-4 col-xs-12"
+                    class="col-sm-6 col-xs-12"
                     style="padding: 0px 10px 10px 10px"
                   >
                     <q-input v-model="filtro.qtdMax" label="Qtd max" />
                   </div>
 
                   <div
-                    class="col-sm-4 col-xs-12"
+                    class="col-sm-6 col-xs-12"
                     style="padding: 0px 10px 10px 10px"
                   >
                     <q-input v-model="filtro.qtdMin" label="Qtd min" />
@@ -94,8 +85,9 @@
               <tbody>
                 <tr :key="item" v-for="item in lista">
                   <td>{{ item.id }}</td>
-                  <td>{{ item.nome }}</td>
                   <td>{{ item.quantidade }}</td>
+                  <td>{{ item.qtdMax }}</td>
+                  <td>{{ item.qtdMin }}</td>
                   <td>
                     <q-btn
                       size="sm"
@@ -156,12 +148,16 @@ export default {
           label: '#ID'
         },
         {
-          name: 'nome',
-          label: 'Nome'
-        },
-        {
           name: 'quantidade',
           label: 'Quantidade'
+        },
+        {
+          name: 'qtdMax',
+          label: 'Qtd Max'
+        },
+        {
+          name: 'qtdMin',
+          label: 'Qtd Min'
         },
         {
           name: 'acoes',
